@@ -110,6 +110,8 @@ Si le serveur n'est pas joignable, consulter les [instructions officielles Ollam
 
 ## Se repérer dans le projet
 
+Le choix de l'environnement de développement est documenté dans les [ADR (décisions d'architecture)](docs/adr/README.md). Les choix de stack, d'IA et de périmètre seront documentés une fois le besoin métier connu.
+
 | Dossier ou fichier | Rôle                                                 |
 | ------------------ | ---------------------------------------------------- |
 | `web/`             | Interface web en TypeScript, servie par Vite.        |
