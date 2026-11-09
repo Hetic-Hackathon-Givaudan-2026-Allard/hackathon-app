@@ -110,7 +110,7 @@ Si le serveur n'est pas joignable, consulter les [instructions officielles Ollam
 
 ## Se repérer dans le projet
 
-Le choix de l'environnement de développement est documenté dans les [ADR (décisions d'architecture)](docs/adr/README.md). Les choix de stack, d'IA et de périmètre seront documentés une fois le besoin métier connu.
+Le choix de l'environnement de développement ainsi que les suggestions de stack et de répartition des responsabilités sont documentés dans les [ADR (décisions d'architecture)](docs/adr/README.md). Aucune option de stack n’est retenue dans ces suggestions ; le fournisseur IA et le périmètre détaillé restent à déterminer.
 
 | Dossier ou fichier | Rôle                                                 |
 | ------------------ | ---------------------------------------------------- |
