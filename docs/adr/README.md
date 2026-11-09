@@ -9,8 +9,9 @@ Une décision structurante correspond à un fichier court, versionné avec le co
 | ADR                                         | Sujet                                                | Statut   |
 | ------------------------------------------- | ---------------------------------------------------- | -------- |
 | [0001](0001-environnement-developpement.md) | Environnement partagé avec VS Code et Dev Containers | proposée |
+| [0002](0002-stack-et-responsabilites.md)    | Suggestions de stack et de responsabilités           | proposée |
 
-Seul le choix de l'environnement de développement est documenté à ce stade. Le sujet métier n'étant pas encore connu, les décisions concernant la stack applicative, l'IA et le périmètre seront documentées lorsqu'elles seront prises avec les informations nécessaires.
+Les suggestions de stack et de répartition des responsabilités pour l’application de préparation des rendez-vous commerciaux sont documentées dans l’[ADR-0002](0002-stack-et-responsabilites.md), au statut « proposée », sans option retenue à ce stade. Le fournisseur IA, le modèle et le périmètre fonctionnel détaillé restent à déterminer.
 
 L'ADR reste au statut « proposée » tant que sa validation n'a pas été formalisée. La présence de composants dans le socle actuel ne vaut pas décision définitive de les conserver.
 
