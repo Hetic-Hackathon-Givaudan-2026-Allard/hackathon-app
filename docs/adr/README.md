@@ -10,6 +10,7 @@ Une décision structurante correspond à un fichier court, versionné avec le co
 | ------------------------------------------- | ---------------------------------------------------- | -------- |
 | [0001](0001-environnement-developpement.md) | Environnement partagé avec VS Code et Dev Containers | proposée |
 | [0002](0002-stack-et-responsabilites.md)    | Suggestions de stack et de responsabilités           | proposée |
+| [0003](0003-contrat-api-openapi.md)         | Contrat HTTP documenté avec OpenAPI                  | proposée |
 
 Les suggestions de stack et de répartition des responsabilités pour l’application de préparation des rendez-vous commerciaux sont documentées dans l’[ADR-0002](0002-stack-et-responsabilites.md), au statut « proposée », sans option retenue à ce stade. Le fournisseur IA, le modèle et le périmètre fonctionnel détaillé restent à déterminer.
 
