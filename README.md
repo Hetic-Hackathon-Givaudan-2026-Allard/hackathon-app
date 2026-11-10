@@ -108,6 +108,12 @@ node -e "fetch('http://host.docker.internal:11434/api/tags').then(r => { if (!r.
 
 Si le serveur n'est pas joignable, consulter les [instructions officielles Ollama](https://github.com/ollama/ollama/blob/main/docs/faq.mdx#how-do-i-configure-ollama-server) pour configurer `OLLAMA_HOST` selon votre système. Ollama écoute par défaut sur `127.0.0.1` ; une écoute sur `0.0.0.0:11434` peut être nécessaire pour l'accès depuis Docker, notamment sous Linux. Cette configuration rend aussi le service accessible au réseau : limiter cet accès avec le pare-feu.
 
+## Documentation de l’API
+
+Le fichier [openapi.yaml](openapi.yaml) décrit les routes Express existantes : `GET /api/health`, `GET /api/questions` et `POST /api/questions`, ainsi que leurs requêtes, réponses et erreurs.
+
+Il documente le socle actuel, pas le futur service Data. Pour consulter la documentation, importer le fichier dans un éditeur compatible OpenAPI. Les erreurs serveur actuelles sont renvoyées par Express en HTML ; seul le cas « Question manquante » dispose d’une erreur JSON explicite.
+
 ## Se repérer dans le projet
 
 Le choix de l'environnement de développement ainsi que les suggestions de stack et de répartition des responsabilités sont documentés dans les [ADR (décisions d'architecture)](docs/adr/README.md). Aucune option de stack n’est retenue dans ces suggestions ; le fournisseur IA et le périmètre détaillé restent à déterminer.
