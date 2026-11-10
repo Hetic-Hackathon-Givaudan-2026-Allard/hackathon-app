@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: API du socle Hackathon Givaudan
+  version: 0.1.0
+  description: >-
+    Contrat de l’API Express actuellement implémentée dans api/src/index.ts.
+    Il décrit le socle question-réponse, pas le futur service de l’équipe Data.
+    Aucune authentification n’est actuellement implémentée.
+servers:
+  - url: http://localhost:3000
+    description: API locale (port par défaut, configurable avec PORT)
+tags:
+  - name: Santé
+    description: Vérification de l’API et de la base de données
+  - name: Questions
+    description: Questions et réponses enregistrées
+paths:
+  /api/health:
+    get:
+      operationId: getHealth
+      tags: [Santé]
+      summary: Vérifier la connexion à PostgreSQL
+      description: Exécute SELECT version(). Ne vérifie pas la disponibilité de l’IA.
+      responses:
+        '200':
+          description: La base de données est joignable.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, db]
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  db:
+                    type: string
+                    description: Chaîne de version renvoyée par PostgreSQL.
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/questions:
+    get:
+      operationId: listQuestions
+      tags: [Questions]
+      summary: Consulter les dix derniers échanges
+      description: >-
+        Retourne au maximum dix échanges, par identifiant décroissant.
+        Aucun paramètre de pagination ou de filtrage n’est implémenté.
+      responses:
+        '200':
+          description: Liste des échanges, éventuellement vide.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 10
+                items:
+                  $ref: '#/components/schemas/Question'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createQuestion
+      tags: [Questions]
+      summary: Poser une question à l’IA et enregistrer sa réponse
+      description: >-
+        Lit le champ question, le convertit en chaîne avec String puis retire
+        les espaces en début et fin. Une valeur absente, null ou vide après
+        ce traitement produit une erreur 400. Les valeurs non textuelles sont
+        également converties en chaîne par l’implémentation actuelle.
+        L’API attend la réponse de l’IA avant d’enregistrer et de retourner
+        l’échange. Aucun historique n’est transmis au modèle.
+      requestBody:
+        description: >-
+          Envoyer de préférence un objet contenant une question textuelle.
+          Un corps absent est traité comme une question manquante.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  description: >-
+                    Valeur convertie en chaîne par le serveur. Une chaîne
+                    non vide après suppression des espaces est attendue pour
+                    l’usage normal ; les autres types JSON ne sont pas rejetés
+                    systématiquement par le code actuel.
+                  example: Quelle est la capitale de la France ?
+            example:
+              question: Quelle est la capitale de la France ?
+      responses:
+        '201':
+          description: Réponse IA obtenue et échange enregistré.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: >-
+            Question manquante ou vide : réponse JSON décrite ci-dessous.
+            Un JSON mal formé ou un corps JSON incompatible avec le parseur
+            Express peut également produire une réponse HTML 400.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [error]
+                properties:
+                  error:
+                    type: string
+                    enum: [Question manquante]
+              example:
+                error: Question manquante
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: Corps dépassant la limite du parseur JSON Express (100 ko par défaut).
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Question:
+      type: object
+      required: [id, question, answer, created_at]
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Identifiant généré par PostgreSQL.
+          example: 3
+        question:
+          type: string
+          example: Quelle est la capitale de la France ?
+        answer:
+          type: string
+          example: Paris.
+        created_at:
+          type: string
+          format: date-time
+          description: Date de création de l’échange.
+          example: '2026-11-10T09:00:00.000Z'
+  responses:
+    InternalServerError:
+      description: >-
+        Erreur de base de données ou, pour POST /api/questions, échec de
+        l’appel IA ou de la lecture de sa réponse. Aucun gestionnaire d’erreurs
+        personnalisé n’est implémenté : Express retourne une réponse HTML,
+        dont le contenu dépend de l’environnement. Aucun format JSON stable
+        n’est garanti pour ces erreurs.
+      content:
+        text/html:
+          schema:
+            type: string
