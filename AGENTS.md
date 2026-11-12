@@ -2,14 +2,15 @@
 
 - Ouvrir le projet dans le Dev Container défini par `.devcontainer/devcontainer.json` ; sa création exécute `npm ci`.
 - Depuis `/workspace`, `npm run dev` lance React/Vite sur le port 5173 ; `compose.yaml` fournit uniquement le conteneur de travail `dev`.
-- `web/src/App.tsx` affiche la page initiale ; aucune recommandation ni requête Data n’est implémentée.
+- `web/src/App.tsx` affiche les espaces de navigation ; `web/src/components/app-sidebar.tsx` définit Nouveau Brief, Projets et Réglages, sans recommandation ni requête Data.
 
 ## Règles
 
-- Exécuter `npm run lint`, `npm run format:check` et `npm run build` ; `.github/workflows/ci.yml` applique les mêmes contrôles après `npm ci`.
+- Exécuter `npm test`, `npm run lint`, `npm run format:check` et `npm run build` ; `.github/workflows/ci.yml` applique les mêmes contrôles après `npm ci`.
 - Développer les composants React dans `web/src/` ; `web/src/main.tsx` monte `App` et `web/tsconfig.json` configure TypeScript.
 - `web/components.json` configure shadcn/ui ; ajouter les composants depuis le Dev Container avec `npx shadcn@latest add <composant> -c web` et utiliser l’alias `@/` vers `web/src/`.
-- `web/package.json` définit le build avec `tsc --noEmit` puis `vite build` ; aucun script de test métier n’est configuré.
+- `web/src/pages/NewBriefPage.tsx` gère le formulaire et son reset, sans appel API. Les sliders de l’interface vont de 0 à 10 ; aligner cette plage avec Data avant l’intégration, car `openapi.yaml` indique encore 1 à 10.
+- `web/package.json` définit le build avec `tsc --noEmit` puis `vite build` ; `npm test` vérifie la validation Zod de `web/src/schemas/new-brief.ts`.
 - Une branche par tâche depuis `develop`, avec une pull request vers `develop` suivant `.github/pull_request_template.md`.
 
 ## Décisions

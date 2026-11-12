@@ -28,7 +28,7 @@ FastAPI restera dans le dépôt Data. Ce service validera les entrées, recherch
 
 Express et la persistance des questions sont retirés du parcours MVP. Aucune base applicative ne sera ajoutée pour anticiper l’historique. Le stockage du catalogue reste nécessaire côté service Data ; son hébergement reste à clarifier. Cet ADR ne choisit ni le moteur de recherche du catalogue ni le fournisseur ou le modèle IA.
 
-Le développement conserve VS Code et Dev Containers. À ce stade, seul le socle React est installé : une page initiale, sans formulaire, simulation ni appel HTTP. Docker Compose fournit uniquement le conteneur de travail ; le frontend démarre manuellement avec `npm run dev`.
+Le développement conserve VS Code et Dev Containers. La navigation et le formulaire Nouveau Brief sont en place, avec catégories conditionnelles et réinitialisation, sans simulation ni appel HTTP. La plage des sliders de l’interface est désormais 0 à 10 ; son alignement avec le contrat Data (1 à 10) reste à confirmer avant le raccordement. Docker Compose fournit uniquement le conteneur de travail ; le frontend démarre manuellement avec `npm run dev`.
 
 Express et PostgreSQL sont retirés du dépôt applicatif et de Compose. Les anciennes données locales ne sont pas effacées. La responsabilité du catalogue reste à convenir avec Data ; aucun stockage de catalogue n’est mis en place ici.
 

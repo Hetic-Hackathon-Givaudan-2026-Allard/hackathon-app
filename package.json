@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write . '!db/data'",
     "format:check": "prettier --check . '!db/data'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "npm run test -w web"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

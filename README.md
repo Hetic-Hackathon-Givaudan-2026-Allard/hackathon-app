@@ -2,7 +2,7 @@
 
 Projet des mastères CTO/Tech Lead, Product et Data de HETIC. Le dépôt contient désormais uniquement le socle frontend React, TypeScript et Vite, dans un Dev Container VS Code. Express, PostgreSQL et l’ancien parcours question-réponse ont été retirés de la configuration.
 
-Le produit visé recommande un parfum ou un arôme à partir d’un brief client et de cinq préférences. Le formulaire, les sliders, l’affichage des résultats et l’intégration FastAPI seront développés progressivement. La page actuelle confirme uniquement le démarrage de React.
+Le produit visé recommande un parfum ou un arôme à partir d’un brief client et de cinq préférences. La page Nouveau Brief contient le choix Parfum/Arômes, le brief, cinq sliders de 0 à 10 et le contexte client. Les catégories changent selon le type de produit et Effacer réinitialise le formulaire. La soumission ne déclenche pas encore de traitement. Projets et Réglages contiennent uniquement leur titre ; les résultats et l’intégration FastAPI restent à développer.
 
 ## Prérequis
 
@@ -29,7 +29,7 @@ Dans le terminal du Dev Container, depuis `/workspace` :
 npm run dev
 ```
 
-Ouvrir [http://localhost:5173](http://localhost:5173), ou l’adresse indiquée dans l’onglet Ports de VS Code. La page affiche « Le socle React est prêt ». Les modifications du frontend sont rechargées par Vite.
+Ouvrir [http://localhost:5173](http://localhost:5173), ou l’adresse indiquée dans l’onglet Ports de VS Code. La page affiche la sidebar et l’espace « Nouveau Brief ». Les modifications du frontend sont rechargées par Vite.
 
 `docker compose up` démarre uniquement le conteneur de travail ; le lancement du frontend reste manuel avec `npm run dev`. Aucun service Data simulé ni base de données ne démarre. Arrêter Vite avec `Ctrl+C` ; fermer la fenêtre attachée au Dev Container arrête Compose selon sa configuration.
 
@@ -38,7 +38,7 @@ Ouvrir [http://localhost:5173](http://localhost:5173), ou l’adresse indiquée 
 | Chemin                           | Rôle                                                                   |
 | -------------------------------- | ---------------------------------------------------------------------- |
 | `web/src/main.tsx`               | Entrée React                                                           |
-| `web/src/App.tsx`                | Composant initial à faire évoluer                                      |
+| `web/src/App.tsx`                | Navigation entre les espaces à développer                              |
 | `web/vite.config.ts`             | Plugin React et serveur sur le port 5173                               |
 | `web/tsconfig.json`              | Vérification TypeScript du frontend                                    |
 | `.devcontainer/`, `compose.yaml` | Environnement de développement                                         |
@@ -70,7 +70,8 @@ Depuis `/workspace`, dans le Dev Container :
 ```shell
 npm run lint
 npm run format:check
+npm test
 npm run build
 ```
 
-La CI exécute les mêmes contrôles après `npm ci`. Le build vérifie les types avec `tsc --noEmit` puis construit le frontend avec Vite. Aucun script de test métier n’est configuré. Utiliser `npm run format` pour corriger la mise en forme.
+La CI exécute les mêmes contrôles après `npm ci`. Le build vérifie les types avec `tsc --noEmit` puis construit le frontend avec Vite. `npm test` vérifie les champs obligatoires, les catégories et les valeurs des sliders avec le schéma Zod de `web/src/schemas/new-brief.ts`. Utiliser `npm run format` pour corriger la mise en forme.
