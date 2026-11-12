@@ -45,6 +45,18 @@ Ouvrir [http://localhost:5173](http://localhost:5173), ou l’adresse indiquée 
 | `docs/adr/`                      | Choix de stack et documentation des décisions                          |
 | `openapi.yaml`                   | Contrat Data de GET /health et POST /ask, non implémenté dans ce dépôt |
 
+## Composants shadcn/ui
+
+shadcn/ui est configuré dans `web/` avec Tailwind CSS et l’alias `@/` vers `web/src/`, selon le [guide officiel Vite](https://ui.shadcn.com/docs/installation/vite). Les composants sont ajoutés comme fichiers source dans le projet, pas comme un service Docker.
+
+Depuis le terminal du Dev Container, à la racine du dépôt, ajouter uniquement les composants nécessaires, par exemple :
+
+```shell
+npx shadcn@latest add button -c web
+```
+
+La configuration se trouve dans `web/components.json`, les styles dans `web/src/index.css` et l’utilitaire `cn` dans `web/src/lib/utils.ts`. `npm ci` installe les dépendances au prochain démarrage du Dev Container ; aucun service supplémentaire n’est requis.
+
 ## Service Data à intégrer ultérieurement
 
 L’équipe Data développe FastAPI dans son propre dépôt. Le frontend devra appeler `POST /ask` avec le type, le brief, les préférences et la région. Le service conserve aussi `GET /health`, qui retourne `{"status":"ok"}`. Le [contrat OpenAPI convenu avec Data](openapi.yaml) décrit les réponses `success`, `no_match` et le format d’erreur. Les statuts HTTP des erreurs restent à préciser ; aucune requête n’est actuellement envoyée par le frontend.

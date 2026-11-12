@@ -8,6 +8,7 @@
 
 - Exécuter `npm run lint`, `npm run format:check` et `npm run build` ; `.github/workflows/ci.yml` applique les mêmes contrôles après `npm ci`.
 - Développer les composants React dans `web/src/` ; `web/src/main.tsx` monte `App` et `web/tsconfig.json` configure TypeScript.
+- `web/components.json` configure shadcn/ui ; ajouter les composants depuis le Dev Container avec `npx shadcn@latest add <composant> -c web` et utiliser l’alias `@/` vers `web/src/`.
 - `web/package.json` définit le build avec `tsc --noEmit` puis `vite build` ; aucun script de test métier n’est configuré.
 - Une branche par tâche depuis `develop`, avec une pull request vers `develop` suivant `.github/pull_request_template.md`.
 
