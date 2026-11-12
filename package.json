@@ -3,15 +3,18 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "web"
+    "web",
+    "tools/data-mock"
   ],
   "scripts": {
     "dev": "npm run dev -w web",
-    "build": "npm run build --workspaces",
+    "build": "npm run build --workspaces --if-present",
     "lint": "eslint .",
     "format": "prettier --write . '!db/data'",
     "format:check": "prettier --check . '!db/data'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "npm run test --workspaces --if-present",
+    "dev:mock": "npm run dev -w data-mock"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

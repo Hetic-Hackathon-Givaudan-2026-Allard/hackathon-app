@@ -25,5 +25,6 @@
     }
   },
   "forwardPorts": [5173],
-  "postCreateCommand": "sudo chown -R node:node /workspace/node_modules && git config --global --add safe.directory /workspace && npm ci"
+  "postCreateCommand": "sudo chown -R node:node /workspace/node_modules && git config --global --add safe.directory /workspace && npm ci",
+  "runServices": ["dev", "data-mock"]
 }

@@ -4,9 +4,9 @@ info:
   version: 0.3.0
   description: >-
     Contrat convenu avec l’équipe Data pour GET /health et POST /ask. Le service FastAPI est
-    développé dans un dépôt distinct ; ce dépôt contient uniquement le frontend.
+    développé dans un dépôt distinct ; ce dépôt fournit le frontend et une simulation Express locale.
     La région est un texte libre, sans liste de valeurs ni règles géographiques
-    définies ici. Le code HTTP de la réponse d’erreur reste à confirmer avec Data.
+    définies ici. Le code HTTP de la réponse d’erreur reste à confirmer avec Data. La simulation locale choisit 422 pour la validation, 413 pour un corps trop grand, 503 pour le scénario [erreur] et 500 pour une erreur interne ; ces choix ne définissent pas le contrat distant.
 paths:
   /health:
     get:
@@ -101,7 +101,7 @@ paths:
                   message: Certaines données sont invalides.
                   details:
                     - field: preferences.audace
-                      message: La valeur doit être un entier compris entre 1 et 10.
+                      message: La valeur doit être un entier compris entre 0 et 10.
 components:
   schemas:
     ProductType:
@@ -109,7 +109,7 @@ components:
       enum: [parfum, arome]
     Preference:
       type: integer
-      minimum: 1
+      minimum: 0
       maximum: 10
     AskRequest:
       type: object
