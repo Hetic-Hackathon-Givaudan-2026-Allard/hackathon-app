@@ -1,52 +1,39 @@
-# 0002. Nous examinons les options de stack et de répartition des responsabilités
+# 0002. Nous construisons le MVP avec React et le service FastAPI de l’équipe Data
 
 - Statut : proposée
-- Date : 2026-11-09
-- Décideurs : Adrien ; prénoms des membres Data et Product à compléter
+- Date : 2026-11-12
+- Décideurs : Adrien ;
 
 ## Contexte
 
-L’application vise à aider un commercial à préparer ses rendez-vous plus rapidement et efficacement. Le détail du parcours, les sources de données disponibles et les critères de qualité restent à préciser avec les membres Product et Data.
+Le commercial choisit entre parfum et arôme, saisit le brief du client et règle cinq préférences de 1 à 10 : Gourmand, Premium, Naturel, Audace et Bien-être. Le résultat attendu est un produit existant dans le catalogue, un score de correspondance, son nom, sa description et les raisons de sa recommandation.
 
-Le socle existant utilise TypeScript, Vite, Express et PostgreSQL. Son interface permet de poser une question et de consulter les réponses enregistrées. React n’est pas encore intégré au projet.
+Le MVP ne comporte pas d’historique ni de comptes utilisateurs. L’équipe Data développe un service Python avec FastAPI dans un dépôt séparé, accessible via un tunnel ngrok, sans authentification. La route de recommandation est `/ask`. Les champs du contrat proposés dans les échanges restent à valider avec Data.
 
-L’équipe Data prévoit d’utiliser Python et FastAPI pour la partie IA. Le Tech Lead envisage de conserver le socle applicatif actuel en ajoutant React au frontend. Le niveau de maîtrise de React par les contributeurs reste à confirmer. Aucun budget d’hébergement ni objectif chiffré de latence n’est défini à ce stade ; l’échéance précise de livraison reste à renseigner.
-
-L’architecture doit permettre aux contributeurs de développer l’interface, la logique applicative et les traitements IA avec des responsabilités explicites. Elle doit aussi limiter le travail d’intégration pendant le hackathon.
+Le dépôt actuel contient un frontend TypeScript avec Vite, une API Express et PostgreSQL pour un socle question-réponse avec persistance. React n’est pas encore installé. La responsabilité de l’hébergement du catalogue reste à confirmer. Aucun budget d’hébergement ni objectif chiffré de latence n’est défini ici.
 
 ## Options
 
-1. **React avec Vite, une API Express et un service IA FastAPI, avec PostgreSQL.** Avantages : réutilisation du backend existant, interface structurée en composants et séparation du développement applicatif et des traitements Python. Inconvénients : deux backends à lancer, intégrer et déployer ; contrats HTTP à maintenir ; gestion supplémentaire des délais et des erreurs entre services.
-2. **React avec Vite et un backend FastAPI unique, avec PostgreSQL.** Avantages : un seul backend pour les routes métier, la persistance et l’IA ; suppression de l’appel intermédiaire entre Express et FastAPI. Inconvénients : migration de la logique Express vers Python et prise en charge de l’ensemble du backend par les contributeurs Python, ou montée en compétence des autres contributeurs.
-3. **Conserver l’interface TypeScript sans React, avec Express et FastAPI, et PostgreSQL.** Avantages : aucun framework frontend supplémentaire à intégrer et réutilisation de l’interface existante. Inconvénients : gestion manuelle du DOM et des états de formulaire, de génération et de modification si ces interactions sont retenues dans le parcours Product ; même complexité d’intégration des deux backends que dans l’option 1.
+1. **React, TypeScript et Vite appelant directement FastAPI.** Avantages : un seul backend, séparation entre interface et traitements Data, composants pour le formulaire et ses états. Inconvénients : dépendance à la disponibilité du service Data, configuration CORS et intégration de React nécessaires.
+2. **React avec Express comme intermédiaire vers FastAPI.** Avantages : possibilité de porter ultérieurement une logique applicative ou des secrets serveur. Inconvénients : deux backends à maintenir alors que le MVP ne demande ni historique ni authentification et qu’aucune responsabilité propre à Express n’est identifiée.
+3. **Frontend TypeScript sans React appelant FastAPI.** Avantages : réutilisation directe de Vite et du DOM existant, sans framework supplémentaire. Inconvénients : gestion manuelle des états liés aux cinq sliders, à la saisie, à l’attente, aux erreurs et au résultat.
 
 ## Décision
 
-Aucune option n’est retenue à ce stade. Ce document rassemble des suggestions pour préparer la discussion avec l’équipe ; le statut « proposée » ne signifie pas que l’option 1 est privilégiée ou validée.
+Nous choisissons l’option 1 comme proposition de stack pour le MVP, parce qu’elle limite le nombre de services applicatifs tout en structurant l’interface interactive avec React. La validation d’équipe reste à renseigner avant de passer le statut à « acceptée ».
 
-L’option 1 pourrait permettre de réutiliser Express et de séparer les traitements IA en Python. L’option 2 pourrait réduire le travail d’intégration en regroupant les responsabilités dans FastAPI. L’option 3 pourrait éviter l’ajout de React si le parcours reste simple. Le choix dépendra du parcours Product, des compétences disponibles et du temps nécessaire pour livrer une première version complète.
+Le frontend utilisera React, TypeScript et Vite. Un module dédié centralisera les appels HTTP, l’URL configurable du service Data et le délai maximal. Il enverra le type de produit, le brief et les cinq préférences à `POST /ask`, puis affichera la recommandation, le score, les arguments et les limites. Le navigateur ne contiendra pas de secret serveur.
 
-À titre d’exemple, si l’option 1 était retenue, la répartition pourrait être la suivante :
+FastAPI restera dans le dépôt Data. Ce service validera les entrées, recherchera les produits du catalogue et construira la réponse. La méthode du score devra être définie avec Data ; le modèle ne devra pas inventer un pourcentage. Le nom et la description du produit proviendront du catalogue. Le sens des préférences, le cas sans correspondance et les erreurs restent à convenir avec Product et Data.
 
-| Composant                 | Responsabilités                                                                                                                                                                                                          |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| React, Vite et TypeScript | Afficher les informations utiles au rendez-vous, recueillir les saisies, présenter les états de chargement et les erreurs, permettre la consultation et la modification des préparations si ces fonctions sont retenues. |
-| Express et TypeScript     | Exposer l’API utilisée par le frontend, valider les demandes applicatives, gérer les clients, rendez-vous et préparations selon le périmètre retenu, appeler FastAPI et enregistrer les données métier.                  |
-| FastAPI et Python         | Préparer et traiter les données utiles à l’IA, accéder aux sources convenues avec Data et Product, appeler le modèle et retourner une préparation structurée accompagnée des références disponibles.                     |
-| PostgreSQL                | Conserver les données applicatives et les préparations enregistrées, sous la responsabilité de l’API Express.                                                                                                            |
+Express et la persistance des questions seront retirés du parcours MVP lors de l’implémentation. Aucune base applicative ne sera ajoutée pour anticiper l’historique. Le stockage du catalogue reste nécessaire : PostgreSQL ne sera retiré de l’infrastructure qu’après clarification de son hébergement avec Data. Cet ADR ne choisit ni le moteur de recherche du catalogue ni le fournisseur ou le modèle IA.
 
-Dans cette hypothèse, le flux pourrait être : **React → Express → FastAPI → Express → PostgreSQL**, puis retour du résultat au frontend. Express pourrait également lire les données enregistrées sans appeler FastAPI. Le navigateur aurait Express comme point d’entrée applicatif.
+Le développement conservera VS Code et Dev Containers. Un service simulé conforme au contrat validé permettra de travailler sans la machine Data. Un ticket d’implémentation adaptera Docker Compose pour démarrer le frontend et cette simulation sans VS Code. La simulation sera explicitement identifiée.
 
-Express pourrait gérer la persistance métier tandis que FastAPI recevrait le contexte nécessaire et retournerait le résultat du traitement. La responsabilité des données et les éventuels besoins de stockage Data resteraient à discuter pour éviter la duplication des règles métier et des écritures.
-
-Si deux backends sont retenus, il serait utile de définir ensemble un contrat HTTP avant leur développement indépendant : exemples de requêtes et de réponses JSON, champs obligatoires, références des sources, format des erreurs et comportement en cas de dépassement du délai d’attente. Le schéma OpenAPI de FastAPI pourrait servir de référence et une réponse simulée permettrait d’avancer sans attendre le traitement IA.
-
-Pour éclairer le choix, Product pourrait préciser les informations attendues dans une préparation et ses critères d’utilité. Data et le Tech Lead pourraient estimer le travail d’intégration et vérifier un premier parcours. La distinction entre faits sourcés et suggestions générées serait également à discuter.
-
-Cet ADR ne sélectionne ni fournisseur ni modèle IA. Il ne décide pas non plus de l’ajout d’un RAG, d’une base vectorielle, d’une file de tâches ou d’un hébergement particulier.
+Le fichier [openapi.yaml](../../openapi.yaml) décrit encore l’API Express existante. Il ne constitue pas le contrat de FastAPI. Sa mise à jour ou son remplacement accompagnera la validation du nouveau contrat et la migration du code, afin de ne pas présenter des routes non implémentées comme disponibles.
 
 ## Conséquences
 
-- Positives : si l’option 1 était retenue, le backend existant pourrait être réutilisé et les responsabilités applicatives et IA séparées ; un contrat partagé faciliterait le travail en parallèle. React pourrait structurer les interactions si le parcours le justifie. L’option 2 permettrait plutôt de réduire le nombre de backends, et l’option 3 éviterait l’ajout d’un framework frontend.
-- Négatives, à accepter : aucun compromis n’est encore accepté. Les options 1 et 3 impliqueraient deux backends, des appels réseau supplémentaires et des dépendances Node.js et Python à intégrer à l’environnement. L’option 2 demanderait de déplacer la logique Express vers FastAPI. Les options avec React ajouteraient une dépendance et un apprentissage éventuel ; l’option sans React conserverait la gestion manuelle du DOM.
-- À revoir si : le parcours Product, les sources de données, les compétences ou le temps disponible évoluent. Avant de retenir une option, vérifier notamment si Express aurait une logique applicative propre, si React répondrait à des interactions identifiées et si les temps de traitement seraient compatibles avec un appel HTTP synchrone. La décision devra être renseignée dans cet ADR après discussion avec l’équipe.
+- Positives : absence d’intermédiaire Express sans responsabilité propre ; réutilisation de TypeScript et Vite ; séparation entre interface et service Data ; développement possible avec une simulation ; ajout ultérieur d’un historique possible sans le développer maintenant.
+- Négatives, à accepter : React doit être intégré et pris en main ; l’ancien socle Express doit être retiré et les scripts, la CI et la documentation adaptés ; les requêtes directes nécessitent une configuration CORS dans FastAPI. Le service réel dépend de la machine Data et du tunnel ngrok. Sans authentification, toute personne pouvant joindre l’API peut l’appeler. La migration n’est pas encore réalisée.
+- À revoir si : des comptes ou un historique deviennent nécessaires, une clé serveur doit être conservée, le service Data ne peut pas être appelé depuis le navigateur ou les générations exigent un traitement asynchrone. Une persistance dans FastAPI ou une API applicative distincte seront alors comparées selon les responsabilités réelles.

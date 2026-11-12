@@ -22,7 +22,7 @@ Les commandes npm ci-dessous se lancent dans le Dev Container, depuis `/workspac
 ## Décisions
 
 - Lis `docs/adr/` avant d'ajouter une dépendance ou de changer de composant.
-- `docs/adr/0002-stack-et-responsabilites.md` ne retient aucune option : l’ajout de React et la séparation Express/FastAPI restent des suggestions, pas des choix validés.
+- `docs/adr/0002-stack-et-responsabilites.md` propose React avec un appel direct à FastAPI pour le MVP sans historique ; la migration n’est pas implémentée. Ne pas supprimer le stockage du catalogue avant clarification avec Data.
 - Ne contredis pas un ADR au statut « acceptée » dans `docs/adr/`.
 - Pour remplacer une décision acceptée, proposer un nouvel ADR selon `docs/adr/README.md` ; ne pas implémenter le changement concerné avant sa validation. Les tâches indépendantes peuvent continuer.
 

@@ -4,7 +4,9 @@
 
 Projet réalisé dans le cadre du hackathon Givaudan 2026 par une équipe réunissant les mastères CTO/Tech Lead, Product et Data de HETIC.
 
-Le socle actuel permet de poser une question à une IA et de consulter les derniers échanges enregistrés en base. Le cas d'usage métier sera développé en équipe.
+Le MVP visé recommande un parfum ou un arôme existant à partir d’un brief et de cinq préférences de 1 à 10 : Gourmand, Premium, Naturel, Audace et Bien-être. Il affiche un score de correspondance, les informations du produit et les raisons de la recommandation, sans historique.
+
+La stack cible proposée est React, TypeScript et Vite appelant directement le service FastAPI de l’équipe Data. Le contrat et l’hébergement du catalogue restent à confirmer. Cette migration n’est pas encore réalisée : le parcours d’installation ci-dessous lance toujours le socle Express/PostgreSQL avec Ollama.
 
 Pour en savoir plus sur le challenge : [Hackathon Givaudan 2026](https://ai-challenge-givaudan.base44.app/).
 
@@ -116,7 +118,7 @@ Il documente le socle actuel, pas le futur service Data. Pour consulter la docum
 
 ## Se repérer dans le projet
 
-Le choix de l'environnement de développement ainsi que les suggestions de stack et de répartition des responsabilités sont documentés dans les [ADR (décisions d'architecture)](docs/adr/README.md). Aucune option de stack n’est retenue dans ces suggestions ; le fournisseur IA et le périmètre détaillé restent à déterminer.
+L’environnement de développement et la stack cible proposée pour le MVP sont documentés dans les [ADR (décisions d’architecture)](docs/adr/README.md). L’ADR-0002 décrit la cible React/FastAPI et les retraits prévus ; le tableau ci-dessous décrit le code actuel.
 
 | Dossier ou fichier | Rôle                                                 |
 | ------------------ | ---------------------------------------------------- |
