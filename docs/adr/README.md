@@ -12,7 +12,7 @@ Une décision structurante correspond à un fichier court, versionné avec le co
 | [0002](0002-stack-et-responsabilites.md)    | MVP React et service FastAPI Data                    | proposée |
 | [0003](0003-contrat-api-openapi.md)         | Contrat HTTP documenté avec OpenAPI                  | proposée |
 
-L’[ADR-0002](0002-stack-et-responsabilites.md) propose React, TypeScript et Vite avec un appel direct au service FastAPI Data pour le MVP sans historique. La migration n’est pas encore implémentée ; le contrat et l’hébergement du catalogue restent à confirmer avec Data.
+L’[ADR-0002](0002-stack-et-responsabilites.md) propose React, TypeScript et Vite avec un appel direct au service FastAPI Data pour le MVP sans historique. Le socle React est installé, sans parcours métier ni simulation ; le contrat de `GET /health` et `POST /ask` avec région est défini avec Data et documenté dans `openapi.yaml`. Son implémentation distante, les statuts HTTP d’erreur et l’hébergement du catalogue restent à vérifier ou préciser.
 
 L'ADR reste au statut « proposée » tant que sa validation n'a pas été formalisée. La présence de composants dans le socle actuel ne vaut pas décision définitive de les conserver.
 

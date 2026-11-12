@@ -6,11 +6,9 @@
 
 ## Contexte
 
-L’API Express actuelle expose trois routes : `GET /api/health`, `GET /api/questions` et `POST /api/questions`. Elles permettent de vérifier la connexion à PostgreSQL, de consulter les derniers échanges et de poser une question à l’IA.
+Le frontend React devra appeler un service de recommandation recevant un type de produit, un brief, cinq préférences et une région. L’équipe Data développe FastAPI dans un dépôt distinct ; le contrat de `POST /ask` et `GET /health` a été défini ensemble.
 
-Le projet réunit des membres des mastères CTO/Tech Lead, Product et Data. L’équipe Data développe son service Python dans un dépôt distinct.
-
-Le fichier `openapi.yaml` existe à la racine du dépôt et décrit le comportement actuel de l’API Express.
+Le fichier `openapi.yaml` décrit désormais le contrat convenu avec Data pour `GET /health` et `POST /ask`, incluant `region` et les exemples de succès, absence de correspondance et erreur. Il remplace la documentation de l’ancien socle Express retiré. Les consignes demandent un contrat versionné et un ADR qui le cite.
 
 ## Options
 
@@ -22,7 +20,9 @@ Le fichier `openapi.yaml` existe à la racine du dépôt et décrit le comportem
 
 Nous choisissons l’option 3 comme proposition à valider, parce qu’elle permet de partager et de versionner le contrat HTTP avec le code sans dépendre de la disponibilité d’un service.
 
-Le fichier de référence est [openapi.yaml](../../openapi.yaml). Il décrit les routes, les corps de requête, les réponses et les erreurs de l’API Express actuelle. Il ne constitue pas le contrat du futur service Data et ne fige pas le choix du framework backend.
+Le fichier de référence est [openapi.yaml](../../openapi.yaml). Il décrit `GET /health`, qui retourne HTTP 200 avec `{"status":"ok"}`, et le contrat convenu pour `POST /ask` : `product_type`, `brief`, `preferences` et `region`. Les deux résultats métier retournent HTTP 200 : `success` contient une recommandation et `no_match` contient `recommendation: null` et un message. L’erreur contient `error.code`, `error.message` et `error.details`. Les codes HTTP d’erreur n’étant pas précisés, le document utilise `default` sans inventer de statuts. Aucune route n’est implémentée dans ce dépôt et le fichier ne prouve pas la conformité du service FastAPI distant.
+
+Les valeurs autorisées pour `region`, leur interprétation, la longueur maximale du brief et les autres codes d’erreur ne sont pas définis par cet accord. Ces points seront documentés lorsqu’ils seront précisés avec Data.
 
 Toute modification d’une route, d’une requête ou d’une réponse devra être accompagnée de la mise à jour du contrat dans la même pull request. La vérification portera sur la validité OpenAPI du fichier et sur sa correspondance avec le code. La validation du format ne garantit pas à elle seule cette correspondance.
 

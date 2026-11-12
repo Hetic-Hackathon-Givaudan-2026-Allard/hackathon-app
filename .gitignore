@@ -2,5 +2,6 @@ db/data/
 node_modules/
 dist/
 .env
-db/data/
-.venv
+.env.local
+.env.*.local
+.venv/

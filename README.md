@@ -1,136 +1,59 @@
-# Projet HETIC — Hackathon Givaudan 2026
+# HETIC — Hackathon Givaudan 2026
 
-## Description
+Projet des mastères CTO/Tech Lead, Product et Data de HETIC. Le dépôt contient désormais uniquement le socle frontend React, TypeScript et Vite, dans un Dev Container VS Code. Express, PostgreSQL et l’ancien parcours question-réponse ont été retirés de la configuration.
 
-Projet réalisé dans le cadre du hackathon Givaudan 2026 par une équipe réunissant les mastères CTO/Tech Lead, Product et Data de HETIC.
+Le produit visé recommande un parfum ou un arôme à partir d’un brief client et de cinq préférences. Le formulaire, les sliders, l’affichage des résultats et l’intégration FastAPI seront développés progressivement. La page actuelle confirme uniquement le démarrage de React.
 
-Le MVP visé recommande un parfum ou un arôme existant à partir d’un brief et de cinq préférences de 1 à 10 : Gourmand, Premium, Naturel, Audace et Bien-être. Il affiche un score de correspondance, les informations du produit et les raisons de la recommandation, sans historique.
+## Prérequis
 
-La stack cible proposée est React, TypeScript et Vite appelant directement le service FastAPI de l’équipe Data. Le contrat et l’hébergement du catalogue restent à confirmer. Cette migration n’est pas encore réalisée : le parcours d’installation ci-dessous lance toujours le socle Express/PostgreSQL avec Ollama.
+- Git et un compte GitHub ayant accès au dépôt.
+- Docker Desktop démarré, ou Docker Engine avec Compose v2 sous Linux.
+- VS Code et l’extension Dev Containers.
 
-Pour en savoir plus sur le challenge : [Hackathon Givaudan 2026](https://ai-challenge-givaudan.base44.app/).
+Node.js et npm sont fournis par le conteneur ; Ollama et PostgreSQL ne sont pas nécessaires pour lancer ce socle.
 
-## Lancer le projet
-
-### 1. Préparer sa machine
-
-- **Git** et un compte GitHub ayant accès au dépôt si celui-ci est privé.
-- **Docker Desktop** démarré (macOS, Windows), ou Docker Engine avec Docker Compose v2 (Linux). Sous Windows, utiliser les conteneurs Linux.
-- **VS Code** et l'extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
-- **[Ollama](https://ollama.com/download)** installé et démarré sur votre machine.
-
-Node.js, npm et PostgreSQL sont fournis par les conteneurs : inutile de les installer sur votre machine pour suivre ce parcours. Prévoir une connexion Internet pour télécharger les images, les dépendances et le modèle lors de la première installation.
-
-Pour contribuer, configurer son identité Git sur la machine :
-
-```shell
-git config --global user.name "Prénom Nom"
-git config --global user.email "votre-adresse@example.com"
-```
-
-VS Code reprend votre configuration Git dans le conteneur. Le clonage ci-dessous utilise HTTPS : une clé SSH n'est pas obligatoire.
-
-### 2. Préparer le modèle IA
-
-Dans un terminal de votre machine, avec Ollama démarré :
-
-```shell
-ollama pull gemma3:1b
-ollama list
-```
-
-Vérifier que `gemma3:1b` apparaît dans la liste. Ollama doit rester démarré pendant l'utilisation des questions à l'IA.
-
-### 3. Cloner et ouvrir le projet
-
-Utiliser l'URL du dépôt de l'organisation :
+## Installation et lancement
 
 ```shell
 git clone https://github.com/Hetic-Hackathon-Givaudan-2026-Allard/hackathon-app.git
 cd hackathon-app
 ```
 
-Ouvrir le dossier `hackathon-app` dans VS Code, puis lancer la commande **Dev Containers: Reopen in Container** depuis la palette (`F1`).
+Ouvrir le dossier dans VS Code et lancer **Dev Containers: Reopen in Container**. Si le projet était déjà ouvert dans un ancien conteneur, utiliser **Dev Containers: Rebuild Container**.
 
-Attendre la fin de la création du conteneur et de l'installation des dépendances. Cette étape :
+La création installe les dépendances avec `npm ci`. Le volume `dev-node-modules` conserve les dépendances du conteneur séparément de celles de la machine.
 
-- démarre PostgreSQL et initialise le schéma avec deux échanges de démonstration au premier démarrage ;
-- installe les dépendances avec `npm ci` ;
-- crée `api/.env` à partir de `api/.env.example` si le fichier n'existe pas déjà.
-
-Le fichier `api/.env` contient la configuration locale et est ignoré par Git. Ne pas y remplacer `db` ou `host.docker.internal` par `localhost` : ces adresses sont utilisées depuis le conteneur.
-
-### 4. Démarrer l'application
-
-Dans le terminal intégré de VS Code, **à l'intérieur du conteneur**, depuis `/workspace` :
+Dans le terminal du Dev Container, depuis `/workspace` :
 
 ```shell
 npm run dev
 ```
 
-Cette commande démarre l'API et le frontend. Garder ce terminal ouvert.
+Ouvrir [http://localhost:5173](http://localhost:5173), ou l’adresse indiquée dans l’onglet Ports de VS Code. La page affiche « Le socle React est prêt ». Les modifications du frontend sont rechargées par Vite.
 
-- **Application :** [http://localhost:5173](http://localhost:5173).
-- **État de l'API et de PostgreSQL :** [http://localhost:3000/api/health](http://localhost:3000/api/health), qui doit renvoyer un JSON avec `"status": "ok"`.
+`docker compose up` démarre uniquement le conteneur de travail ; le lancement du frontend reste manuel avec `npm run dev`. Aucun service Data simulé ni base de données ne démarre. Arrêter Vite avec `Ctrl+C` ; fermer la fenêtre attachée au Dev Container arrête Compose selon sa configuration.
 
-Si un port local est déjà occupé, consulter l'onglet **Ports** de VS Code pour retrouver l'adresse transférée.
+## Structure
 
-### 5. Vérifier que tout fonctionne
+| Chemin                           | Rôle                                                                   |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| `web/src/main.tsx`               | Entrée React                                                           |
+| `web/src/App.tsx`                | Composant initial à faire évoluer                                      |
+| `web/vite.config.ts`             | Plugin React et serveur sur le port 5173                               |
+| `web/tsconfig.json`              | Vérification TypeScript du frontend                                    |
+| `.devcontainer/`, `compose.yaml` | Environnement de développement                                         |
+| `docs/adr/`                      | Choix de stack et documentation des décisions                          |
+| `openapi.yaml`                   | Contrat Data de GET /health et POST /ask, non implémenté dans ce dépôt |
 
-1. Ouvrir l'application : la mention `API OK` et les deux échanges de démonstration doivent apparaître sur une base neuve.
-2. Saisir une question et cliquer sur **Envoyer**. La première réponse peut prendre un peu de temps pendant le chargement du modèle.
-3. Vérifier que la question et la réponse apparaissent dans la liste, puis recharger la page : l'échange doit toujours être présent.
+## Service Data à intégrer ultérieurement
 
-Le contrôle `/api/health` vérifie la base de données, mais ne vérifie pas Ollama. L'envoi d'une question valide le parcours complet.
+L’équipe Data développe FastAPI dans son propre dépôt. Le frontend devra appeler `POST /ask` avec le type, le brief, les préférences et la région. Le service conserve aussi `GET /health`, qui retourne `{"status":"ok"}`. Le [contrat OpenAPI convenu avec Data](openapi.yaml) décrit les réponses `success`, `no_match` et le format d’erreur. Les statuts HTTP des erreurs restent à préciser ; aucune requête n’est actuellement envoyée par le frontend.
 
-### Arrêter et reprendre le travail
+La gestion du catalogue et son hébergement restent à convenir avec Data. Les anciens fichiers locaux `db/data/` et `api/.env`, s’ils existent, ne sont pas utilisés et n’ont pas été effacés.
 
-- Arrêter l'API et le frontend avec `Ctrl+C` dans leur terminal.
-- Fermer la fenêtre VS Code attachée au conteneur arrête la stack Docker configurée pour ce projet.
-- Pour reprendre, rouvrir le projet dans son Dev Container, démarrer Ollama sur la machine et relancer `npm run dev`.
+## Vérifications
 
-Les données PostgreSQL sont conservées dans `db/data/`, ignoré par Git. Les scripts `db/init/` ne sont exécutés qu'à l'initialisation d'une base vide.
-
-## En cas de problème
-
-| Symptôme                                             | Vérification                                                                                                                                             |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Le dépôt est introuvable ou le clonage est refusé    | Vérifier l'URL et l'accès de votre compte GitHub à l'organisation et au dépôt.                                                                           |
-| Le Dev Container ne démarre pas                      | Vérifier que Docker est démarré. Consulter **Dev Containers: Show Container Log** dans la palette VS Code.                                               |
-| La page reste sur « Connexion à l'API… »             | Vérifier que `npm run dev` tourne dans le conteneur et lire les erreurs dans son terminal. Tester `/api/health`.                                         |
-| Les échanges s'affichent, mais l'IA ne répond pas    | Vérifier qu'Ollama est démarré sur la machine et que `ollama list` contient `gemma3:1b`. Lire les erreurs de l'API dans le terminal.                     |
-| L'API ne parvient pas à joindre Ollama depuis Docker | Vérifier la connexion depuis le terminal du conteneur avec la commande ci-dessous. Selon le système, adapter l'adresse d'écoute d'Ollama et le pare-feu. |
-| `api/.env` manque                                    | Dans le terminal du conteneur, depuis `/workspace`, exécuter `cp api/.env.example api/.env`, puis relancer `npm run dev`.                                |
-
-Test de connexion à Ollama **depuis le conteneur** :
-
-```shell
-node -e "fetch('http://host.docker.internal:11434/api/tags').then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(console.log).catch(e => { console.error(e); process.exitCode = 1; })"
-```
-
-Si le serveur n'est pas joignable, consulter les [instructions officielles Ollama](https://github.com/ollama/ollama/blob/main/docs/faq.mdx#how-do-i-configure-ollama-server) pour configurer `OLLAMA_HOST` selon votre système. Ollama écoute par défaut sur `127.0.0.1` ; une écoute sur `0.0.0.0:11434` peut être nécessaire pour l'accès depuis Docker, notamment sous Linux. Cette configuration rend aussi le service accessible au réseau : limiter cet accès avec le pare-feu.
-
-## Documentation de l’API
-
-Le fichier [openapi.yaml](openapi.yaml) décrit les routes Express existantes : `GET /api/health`, `GET /api/questions` et `POST /api/questions`, ainsi que leurs requêtes, réponses et erreurs.
-
-Il documente le socle actuel, pas le futur service Data. Pour consulter la documentation, importer le fichier dans un éditeur compatible OpenAPI. Les erreurs serveur actuelles sont renvoyées par Express en HTML ; seul le cas « Question manquante » dispose d’une erreur JSON explicite.
-
-## Se repérer dans le projet
-
-L’environnement de développement et la stack cible proposée pour le MVP sont documentés dans les [ADR (décisions d’architecture)](docs/adr/README.md). L’ADR-0002 décrit la cible React/FastAPI et les retraits prévus ; le tableau ci-dessous décrit le code actuel.
-
-| Dossier ou fichier | Rôle                                                 |
-| ------------------ | ---------------------------------------------------- |
-| `web/`             | Interface web en TypeScript, servie par Vite.        |
-| `api/`             | API Express en TypeScript et appels au modèle IA.    |
-| `db/init/`         | Schéma PostgreSQL et données de démonstration.       |
-| `compose.yaml`     | Services Docker de développement et base de données. |
-| `.devcontainer/`   | Environnement VS Code partagé par l'équipe.          |
-
-## Vérifications avant une contribution
-
-Depuis `/workspace`, dans le conteneur :
+Depuis `/workspace`, dans le Dev Container :
 
 ```shell
 npm run lint
@@ -138,4 +61,4 @@ npm run format:check
 npm run build
 ```
 
-Pour corriger la mise en forme, utiliser `npm run format`. Ces trois vérifications sont également exécutées par la CI GitHub. Le projet ne comporte pas encore de suite de tests automatisés.
+La CI exécute les mêmes contrôles après `npm ci`. Le build vérifie les types avec `tsc --noEmit` puis construit le frontend avec Vite. Aucun script de test métier n’est configuré. Utiliser `npm run format` pour corriger la mise en forme.
