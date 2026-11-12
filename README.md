@@ -31,7 +31,7 @@ Scénarios de démonstration (remplacer uniquement le brief, en gardant les autr
 
 Le mock attend environ 600 ms par défaut pour rendre le chargement visible ; `[lent]` attend environ 3 secondes. Remplir les autres champs obligatoires pour chacun de ces scénarios.
 
-Effacer remet les champs et résultats à zéro, et annule la requête en cours. Une modification pendant la recherche annule aussi la requête pour ne pas afficher un résultat correspondant à d’anciens critères. Les valeurs initiales des sliders sont 5 ; les entiers de 0 à 10 sont acceptés.
+Effacer réinitialise le formulaire, et annule la requête en cours. Une modification pendant la recherche annule aussi la requête pour ne pas afficher un résultat correspondant à d’anciens critères. Les valeurs initiales des sliders sont 5 ; les entiers de 0 à 10 sont acceptés.
 
 Arrêter avec `Ctrl+C` puis `docker compose down`. Les anciens fichiers `db/data/` et `api/.env`, s’ils existent, ne sont ni utilisés ni effacés.
 
