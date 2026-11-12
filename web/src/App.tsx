@@ -6,6 +6,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
 import NewBriefPage from '@/pages/NewBriefPage';
 import ProjectsPage from '@/pages/ProjectsPage';
 import SettingsPage from '@/pages/SettingsPage';
@@ -22,6 +23,7 @@ export default function App() {
 
   return (
     <TooltipProvider>
+      <Toaster richColors closeButton position="top-right" />
       <SidebarProvider>
         <AppSidebar activePage={activePage} onNavigate={setActivePage} />
         <SidebarInset>

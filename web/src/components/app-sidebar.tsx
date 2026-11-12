@@ -55,7 +55,7 @@ export function AppSidebar({
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-4 py-5 group-data-[collapsible=icon]:px-2">
+      <SidebarHeader className="h-16 shrink-0 flex-row items-center border-b px-4 py-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
         <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:sr-only">
           Hackathon Givaudan
         </span>

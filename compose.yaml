@@ -1,7 +1,42 @@
 name: hackathon
 
 services:
+  web:
+    build:
+      context: .
+      target: frontend
+    environment:
+      VITE_DATA_API_URL: ${VITE_DATA_API_URL:-http://localhost:8000}
+      VITE_DATA_API_MODE: ${VITE_DATA_API_MODE:-mock}
+    ports:
+      - '127.0.0.1:${WEB_PORT:-5173}:5173'
+    depends_on:
+      data-mock:
+        condition: service_healthy
+
+  data-mock:
+    build:
+      context: .
+      target: data-mock
+    environment:
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+    ports:
+      - '127.0.0.1:8000:8000'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:8000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
   dev:
+    profiles: [dev]
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile

@@ -10,7 +10,7 @@ Le projet hackathon réunit des étudiants des mastères CTO/Tech Lead, Product 
 
 Lors de la rédaction initiale, le sujet métier n’était pas encore connu. La stack MVP est maintenant décrite dans l’ADR-0002 ; le modèle IA reste à définir avec Data. Les compétences techniques et les configurations matérielles de l’ensemble des participants ne sont pas encore recensées. Aucun budget d’hébergement ni délai précis d’installation n’est documenté à ce stade.
 
-Le dépôt contient déjà une configuration VS Code Dev Containers et Docker Compose. Elle fournit désormais uniquement un conteneur de travail et installe les dépendances avec `npm ci`. Le frontend React est lancé manuellement avec `npm run dev` ; PostgreSQL et Express ont été retirés.
+Le dépôt contient déjà une configuration VS Code Dev Containers et Docker Compose. Le parcours VS Code fournit un conteneur de travail, installe les dépendances avec `npm ci` et démarre le mock Data séparément. Le frontend est lancé avec `npm run dev`. Le parcours autonome `docker compose up` lance le frontend et le mock sans VS Code, selon l’ADR-0004. PostgreSQL reste retiré.
 
 ## Options
 
